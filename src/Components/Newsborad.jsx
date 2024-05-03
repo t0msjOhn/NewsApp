@@ -4,8 +4,18 @@ import Newsitem from "./Newsitem";
 const Newsboard = ({category}) =>{
     const [articles,setArticle] =  useState([]);
     useEffect(()=>{
-        const url = `https://newsapi.org/v2/top-headlines?country=in&category=${category}&apiKey=${import.meta.env.VITE_API_KEY}`;
-        fetch(url).then(response=>response.json()).then(data=>setArticle(data.articles))
+        const fetchArticles = async () => {
+            try {
+                const url = `https://newsapi.org/v2/top-headlines?country=in&category=${category}&apiKey=${import.meta.env.VITE_API_KEY}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                setArticle(data.articles);
+            } catch (error) {
+                console.error("Error fetching articles:", error);
+            }
+        };
+
+        fetchArticles();
     },[category]);
     return(
         <div>
